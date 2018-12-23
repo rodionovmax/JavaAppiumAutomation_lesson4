@@ -74,7 +74,6 @@ public class MainPageObject {
         int end_y = (int) (size.height * 0.2);
 
         action.press(x, start_y).waitAction(timeOfSwipe).moveTo(x, end_y).release().perform();
-
     }
 
     //method to swipeDown just to repeat material
