@@ -1,8 +1,6 @@
 import io.appium.java_client.AppiumDriver;
 import lib.CoreTestCase;
-import lib.ui.ArticlePageObject;
-import lib.ui.MainPageObject;
-import lib.ui.SearchPageObject;
+import lib.ui.*;
 import org.junit.Assert;
 import org.junit.Test;
 import org.openqa.selenium.By;
@@ -112,107 +110,25 @@ public class FirstTest extends CoreTestCase {
     @Test
     public void testSaveFirstArtcileToMyList()
     {
-        MainPageObject.waitForElementAndClick(
-                By.xpath("//*[contains(@text, 'Search Wikipedia')]"),
-                "Cannot find 'Search Wikipedia",
-                5
-        );
+        SearchPageObject SearchPageObject = new SearchPageObject(driver);
 
-        MainPageObject.waitForElementAndSendKeys(
-                By.xpath("//*[contains(@text, 'Search…')]"),
-                "Java",
-                "Cannot find 'Search...' field",
-                5
-        );
+        SearchPageObject.initSearchInput();
+        SearchPageObject.typeSearchLine("Java");
+        SearchPageObject.clickByArticleWithSubstring("Object-oriented programming language");
 
-        MainPageObject.waitForElementAndClick(
-                By.xpath("//*[@resource-id='org.wikipedia:id/page_list_item_container']//*[@text='Object-oriented programming language']"),
-                "Cannot find 'Search Wikipedia' input",
-                5
-        );
-
-        MainPageObject.waitForElementPresent(
-                By.id("org.wikipedia:id/view_page_title_text"),
-                "Cannot find article title",
-                15
-        );
-
-        MainPageObject.waitForElementAndClick(
-                By.xpath("//android.widget.ImageView[@content-desc='More options']"),
-                "Cannot find button to open article options",
-                10
-        );
-
-        MainPageObject.waitForElementAndClick(
-                By.xpath("//*[@text='Add to reading list']"),
-                "Cannot find the option to add article to option list",
-                5
-        );
-
-        MainPageObject.waitForElementAndClick(
-                By.id("org.wikipedia:id/onboarding_button"),
-                "Cannot find GOT IT button",
-                5
-        );
-
-        MainPageObject.waitForElementAndClear(
-                By.id("org.wikipedia:id/text_input"),
-                "Cannot find input to set name of articles folder",
-                5
-        );
-
+        ArticlePageObject ArticlePageObject = new ArticlePageObject(driver);
+        ArticlePageObject.waitForTitleElement();
+        String article_title = ArticlePageObject.getArticleTitle();
         String name_of_folder = "Learning programming";
+        ArticlePageObject.addArticleToMyList(name_of_folder);
+        ArticlePageObject.closeArticle();
 
-        MainPageObject.waitForElementAndSendKeys(
-                By.id("org.wikipedia:id/text_input"),
-                name_of_folder,
-                "Cannot enter text for into articles folder",
-                5
-        );
+        NavigationUI NavigationUI = new NavigationUI(driver);
+        NavigationUI.clickMyList();
 
-        MainPageObject.waitForElementAndClick(
-                //in case of error use By.xpath("//*[@text='OK']"),
-                By.xpath("//*[@resource-id='android:id/button1'][@text='OK']"),
-                "Cannot find OK button",
-                5
-        );
-
-        MainPageObject.waitForElementAndClick(
-                By.xpath("//android.widget.ImageButton[@content-desc='Navigate up']"),
-                "Cannot close the article, cannot find X link",
-                5
-        );
-
-        MainPageObject.waitForElementAndClick(
-                By.xpath("//android.widget.FrameLayout[@content-desc='My lists']"),
-                "Cannot find navigation button to my list",
-                5
-        );
-
-        //here can be an error because of the wrong locator By.xpath("//android.widget.FrameLayout[@content-desk='My lists']")
-        MainPageObject.waitForElementAndClick(
-                By.xpath("//android.widget.FrameLayout//*[@text='My lists']"),
-                "Cannot find navigation button to my list",
-                5
-        );
-
-        //here can be an error because of the wrong locator
-        MainPageObject.waitForElementAndClick(
-                By.xpath("//*[@text='" + name_of_folder + "']"),
-                "Cannot find created folder",
-                5
-        );
-
-        MainPageObject.elementSwipeToTheLeft(
-                By.xpath("//*[@text='Java (programming language)']"),
-                "Cannot find saved article"
-        );
-
-        MainPageObject.waitForElementNotPresent(
-                By.xpath("//*[@text='Java (programming language)']"),
-                "Cannot delete saved article",
-                5
-        );
+        MyListsPageObject MyListPageObject = new MyListsPageObject(driver);
+        MyListPageObject.openFolderByName(name_of_folder);
+        MyListPageObject.swipeByArticleToDelete(article_title);
     }
 
     @Test
@@ -380,7 +296,5 @@ public class FirstTest extends CoreTestCase {
                 5
         );
     }
-
-
 
 }
