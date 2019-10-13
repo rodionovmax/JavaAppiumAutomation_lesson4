@@ -25,7 +25,7 @@ public class Platform {
         return instance;
     }
 
-//    protected AppiumDriver driver;
+    protected AppiumDriver driver;
 
     public AppiumDriver getDriver() throws Exception{
         URL URL = new URL(APPIUM_URL);
@@ -34,7 +34,7 @@ public class Platform {
         } else if(this.isIOS()){
             return new IOSDriver(URL, this.getIOSDesiredCapabiities());
         } else {
-            throw new Exception("Cannot detect type of the Driver. Platform value: " + this.getPlaformVar());
+            throw new Exception("Cannot detect type of the Driver. Platform value: " + this.getPlatformVar());
         }
     }
 
@@ -51,11 +51,12 @@ public class Platform {
 
         capabilities.setCapability("platformName", "Android");
         capabilities.setCapability("deviceName", "AndroidTestDevice");
-        capabilities.setCapability("platformVersion", "6.0");
+        capabilities.setCapability("platformVersion", "10.0");
         capabilities.setCapability("automationName", "Appium");
         capabilities.setCapability("appPackage", "org.wikipedia");
         capabilities.setCapability("appActivity", "main.MainActivity");
-        capabilities.setCapability("app", "/Users/rodionovmax/IdeaProjects/JavaAppiumAutomation_homework1/apks/org.wikipedia.apk");
+//        capabilities.setCapability("app", "/Users/max/sandbox/JavaAppiumAutomation_lesson4/apks/org.wikipedia.apk");
+        capabilities.setCapability("app", System.getProperty("user.dir") + "/apks/org.wikipedia.apk");
         return capabilities;
     }
 
@@ -65,17 +66,18 @@ public class Platform {
         capabilities.setCapability("platformName", "iOS");
         capabilities.setCapability("deviceName", "iPhone 7");
         capabilities.setCapability("platformVersion", "12.2");
-        capabilities.setCapability("app", "/Users/rodionovmax/Desktop/JavaAppiumAutomation/Wikipedia.app");
+//        capabilities.setCapability("app", "/Users/max/sandbox/JavaAppiumAutomation_lesson4/apks/Wikipedia.app");
+        capabilities.setCapability("app", System.getProperty("user.dir") + "/apks/Wikipedia.app");
         capabilities.setCapability("automationName", "XCUITest");
         return capabilities;
     }
 
     private boolean isPlatform(String my_plaform){
-        String platform = this.getPlaformVar();
+        String platform = this.getPlatformVar();
         return my_plaform.equals(platform);
     }
 
-    public String getPlaformVar(){
+    public String getPlatformVar(){
         return System.getenv("PLATFORM");
     }
 
